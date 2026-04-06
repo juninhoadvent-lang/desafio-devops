@@ -1,0 +1,29 @@
+name: Pipeline CI Docker
+
+# Gatilho: executa ao fazer push na branch main [cite: 21]
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      # Login no Docker Hub usando as Secrets do GitHub [cite: 11, 23, 30]
+      - name: Login no Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Build e Push automático [cite: 10, 12, 22, 24]
+      - name: Build e Push da imagem
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          # Formato esperado: usuario/nome-app:latest [cite: 27, 28]
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/desafio-app:latest
