@@ -4,6 +4,9 @@ name: Pipeline CI Docker
 on:
   push:
     branches: [ "main" ]
+# ESTA É A PARTE QUE CORRIGE O AVISO:
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   build-and-push:
@@ -27,3 +30,6 @@ jobs:
           push: true
           # Formato esperado: usuario/nome-app:latest [cite: 27, 28]
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/desafio-app:latest
+
+
+
