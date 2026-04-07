@@ -30,7 +30,6 @@ jobs:
           file: ./Dockerfile
           push: true
           # Formato esperado: usuario/nome-app:latest [cite: 27, 28]
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/desafio-app:latest
-
-
-
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/desafio-app:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/desafio-app:${{ github.sha }}
