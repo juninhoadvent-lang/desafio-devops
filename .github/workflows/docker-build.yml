@@ -29,7 +29,6 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: user/app:latest
           # Formato esperado: usuario/nome-app:latest [cite: 27, 28]
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/desafio-app:latest
 
