@@ -11,6 +11,7 @@ COPY package*.json ./
 RUN npm cache clean --force && \
     npm install --loglevel=error --fetch-retries=5
 
+COPY . .
 # Porta que a aplicação vai usar [cite: 18]
 EXPOSE 8080
 
