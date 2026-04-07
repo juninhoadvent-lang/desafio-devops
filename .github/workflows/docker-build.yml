@@ -1,10 +1,9 @@
 name: Pipeline CI Docker
 
-# Gatilho: executa ao fazer push na branch main [cite: 21]
 on:
   push:
     branches: [ "main" ]
-# ESTA É A PARTE QUE CORRIGE O AVISO:
+
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
@@ -15,21 +14,24 @@ jobs:
       - name: Checkout do código
         uses: actions/checkout@v4
 
-      # Login no Docker Hub usando as Secrets do GitHub [cite: 11, 23, 30]
+      # 1. PASSO NOVO: Extrai os 7 primeiros caracteres do Hash
+      - name: Set short git commit SHA
+        id: vars
+        run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
       - name: Login no Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Build e Push automático [cite: 10, 12, 22, 24]
+      # 2. PASSO AJUSTADO: Usa a variável sha_short que criamos acima
       - name: Build e Push da imagem
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ./Dockerfile
           push: true
-          # Formato esperado: usuario/nome-app:latest [cite: 27, 28]
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/desafio-app:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/desafio-app:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/desafio-app:${{ steps.vars.outputs.sha_short }}
